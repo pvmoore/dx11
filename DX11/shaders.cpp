@@ -31,7 +31,7 @@ static string getTarget(Shaders::Target target, string prefix) {
 	return s;
 }
 
-VertexShader Shaders::getVS(const wstring& filename, string entry) {
+VertexShader Shaders::getVS(const wstring& filename, string entry) const {
 	ComPtr<ID3D11VertexShader> vs;
 	if(entry.empty()) entry = "VSMain";
 	auto blob = compile(filename, entry, getTarget(target, "vs"));
@@ -45,7 +45,7 @@ VertexShader Shaders::getVS(const wstring& filename, string entry) {
 	}
 	return {vs, blob};
 }
-HullShader Shaders::getHS(const wstring& filename, string entry) {
+HullShader Shaders::getHS(const wstring& filename, string entry) const {
 	ComPtr<ID3D11HullShader> hs;
 	if(entry.empty()) entry = "HSMain";
 	auto blob = compile(filename, entry, getTarget(target, "ps"));
@@ -59,7 +59,7 @@ HullShader Shaders::getHS(const wstring& filename, string entry) {
 	}
 	return {hs, blob};
 }
-DomainShader Shaders::getDS(const wstring& filename, string entry) {
+DomainShader Shaders::getDS(const wstring& filename, string entry) const {
 	ComPtr<ID3D11DomainShader> ds;
 	if(entry.empty()) entry = "DSMain";
 	auto blob = compile(filename, entry, getTarget(target, "ps"));
@@ -73,7 +73,7 @@ DomainShader Shaders::getDS(const wstring& filename, string entry) {
 	}
 	return {ds, blob};
 }
-GeometryShader Shaders::getGS(const wstring& filename, string entry) {
+GeometryShader Shaders::getGS(const wstring& filename, string entry) const {
 	ComPtr<ID3D11GeometryShader> gs;
 	if(entry.empty()) entry = "GSMain";
 	auto blob = compile(filename, entry, getTarget(target, "ps"));
@@ -87,7 +87,7 @@ GeometryShader Shaders::getGS(const wstring& filename, string entry) {
 	}
 	return {gs, blob};
 }
-PixelShader Shaders::getPS(const wstring& filename, string entry) {
+PixelShader Shaders::getPS(const wstring& filename, string entry) const {
 	ComPtr<ID3D11PixelShader> ps;
 	if(entry.empty()) entry = "PSMain";
 	auto blob = compile(filename, entry, getTarget(target, "ps"));
@@ -101,7 +101,7 @@ PixelShader Shaders::getPS(const wstring& filename, string entry) {
 	}
 	return {ps, blob};
 }
-ComputeShader Shaders::getCS(const wstring& filename, string entry, D3D_SHADER_MACRO* defines) {
+ComputeShader Shaders::getCS(const wstring& filename, string entry, D3D_SHADER_MACRO* defines) const {
 	ComPtr<ID3D11ComputeShader> cs;
 	if(entry.empty()) entry = "CSMain";
 	auto blob = compile(filename, entry, getTarget(target, "cs"), defines);
@@ -115,7 +115,7 @@ ComputeShader Shaders::getCS(const wstring& filename, string entry, D3D_SHADER_M
 	}
 	return {cs, blob};
 }
-ComPtr<ID3DBlob> Shaders::compile(const wstring& filename, string entry, string target, D3D_SHADER_MACRO* defines) {
+ComPtr<ID3DBlob> Shaders::compile(const wstring& filename, string entry, string target, D3D_SHADER_MACRO* defines) const {
 	if(!File::exists(filename)) {
 		throw std::runtime_error(String::format("Shader file '%s' does not exist", WString::toString(filename).c_str()).c_str());
 	}

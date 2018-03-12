@@ -115,7 +115,7 @@ void DX11::createWindow() {
 	log("\tDesktop DPI = %u (%u%% scaling)", dpi, (dpi*100)/96);
 #else
 	/// Manually set DPI Awareness in the manifest
-	Log::format("\tWindows version < 10 : Set DPI awareness manually");
+	Log::write("\tWindows version < 10 : Set DPI awareness manually");
 #endif
 	auto screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	auto screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -229,7 +229,7 @@ void DX11::createDevice() {
 	vp.TopLeftY = 0.0f; // -(float)(params.height/2); //0.0f;
 	context->RSSetViewports(1, &vp);
 
-	Log::format("================================================== DX11 ready");
+	Log::write("================================================== DX11 ready");
 }
 void DX11::selectAdapter() {
 	Log::write("Enumerating adapters");
