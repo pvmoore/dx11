@@ -9,7 +9,7 @@ DX11::DX11() {
 	self = this;
 }
 DX11::~DX11() {
-	Log::format("Deleting DX11");
+	Log::write("Deleting DX11");
 	if(hwnd && hInstance) {
 		ChangeDisplaySettings(nullptr, 0);
 		DestroyWindow(hwnd);
@@ -20,94 +20,77 @@ void DX11::init(HINSTANCE hInstance,
 				InitParams params, 
 				InputEventHandler* eventHandler) 
 {
-	this->hInstance = hInstance;
-	this->params = params;
+	this->hInstance    = hInstance;
+	this->params	   = params;
 	this->eventHandler = eventHandler;
 
-	try{
-		createWindow();
-		createDevice();
-		swapChain.init();
-	}catch(std::exception& e) {
-		Log::format("==========================================");
-		Log::format("ERROR: Caught exception: %s", e.what());
-		Log::format("==========================================");
-		wstring msg = WString::toWString(e.what());
-		MessageBox(hwnd, msg.c_str(), L"Error", MB_OK | MB_ICONEXCLAMATION);
-	}
+	createWindow();
+	createDevice();
+	swapChain.init();
 }
 void DX11::run() {
-	Log::format("Entering run loop");
 	MSG msg;
 	float delta = 1;
 	auto lastFrameTimestamp = high_resolution_clock::now();
 	uint prev5Seconds;
 	uint prevSecond = prev5Seconds = (uint)(lastFrameTimestamp.time_since_epoch().count() * 1e-9);
-	try{
-		while(true) {
-			if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
 
-				if(msg.message == WM_QUIT) break;
-				continue;
-			}
+	while(true) {
+		if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 
-			FrameResource& frame = swapChain.prepare();
-			frame.device = device;
-			frame.context = context;
-			frame.number = frameNumber;
-			frame.delta = delta;
+			if(msg.message == WM_QUIT) break;
+			continue;
+		}
 
-			/// Let the client render now
-			eventHandler->render(frame);
-			swapChain.present();
+		FrameResource& frame = swapChain.prepare();
+		frame.device = device;
+		frame.context = context;
+		frame.number = frameNumber;
+		frame.delta = delta;
 
-			/// Update timing info
-			auto timestamp = high_resolution_clock::now();
-			ulong frameNsecs = (timestamp - lastFrameTimestamp).count();
-			lastFrameTimestamp = timestamp;
+		/// Let the client render now
+		eventHandler->render(frame);
+		swapChain.present();
 
-			delta = (float)(double)(frameNsecs * 1e-9);
-			frameNumber++;
+		/// Update timing info
+		auto timestamp = high_resolution_clock::now();
+		ulong frameNsecs = (timestamp - lastFrameTimestamp).count();
+		lastFrameTimestamp = timestamp;
 
-			double totalSeconds = timestamp.time_since_epoch().count() * 1e-9;
-			if((uint)totalSeconds > prevSecond) {
-				/// Every second
-				prevSecond = (uint)totalSeconds;
-				double ms = frameNsecs * 1e-6;
-				double fps = 1000.0 / ms;
-				Log::format("Frame [%llu] Delta: %.4f, Elapsed: %.3fms, FPS: %.3f",
-					frameNumber, delta, ms, fps);
-				/// Every 5 seconds
-				if((uint)totalSeconds>prev5Seconds+5) {
-					prev5Seconds = (uint)totalSeconds;
-					DXGI_QUERY_VIDEO_MEMORY_INFO memoryInfo;
-					adapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memoryInfo);
-					Log::format("\tSystem mem usage .. ?");
-					Log::format("\tGPU mem usage ..... %llu MB (of %llu MB budget)",
-						memoryInfo.CurrentUsage/(1024*1024),
-						memoryInfo.Budget/(1024*1024));
-					/// Add fps to window title
-					if(params.windowMode==WindowMode::WINDOWED) {
-						wstring s = params.title + wstring(L" : ") +
-							std::to_wstring((uint)fps) + wstring(L" FPS");
-						setTitle(s.c_str());
-					}
+		delta = (float)(double)(frameNsecs * 1e-9);
+		frameNumber++;
+
+		double totalSeconds = timestamp.time_since_epoch().count() * 1e-9;
+		if((uint)totalSeconds > prevSecond) {
+			/// Every second
+			prevSecond = (uint)totalSeconds;
+			double ms = frameNsecs * 1e-6;
+			double fps = 1000.0 / ms;
+			Log::format("Frame [%llu] Delta: %.4f, Elapsed: %.3fms, FPS: %.3f",
+				frameNumber, delta, ms, fps);
+			/// Every 5 seconds
+			if((uint)totalSeconds>prev5Seconds+5) {
+				prev5Seconds = (uint)totalSeconds;
+				DXGI_QUERY_VIDEO_MEMORY_INFO memoryInfo;
+				adapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memoryInfo);
+				Log::format("\tSystem mem usage .. ?");
+				Log::format("\tGPU mem usage ..... %llu MB (of %llu MB budget)",
+					memoryInfo.CurrentUsage/(1024*1024),
+					memoryInfo.Budget/(1024*1024));
+				/// Add fps to window title
+				if(params.windowMode==WindowMode::WINDOWED) {
+					wstring s = params.title + wstring(L" : ") +
+						std::to_wstring((uint)fps) + wstring(L" FPS");
+					setTitle(s.c_str());
 				}
 			}
 		}
-	}catch(std::exception& e) {
-		Log::format("==========================================");
-		Log::format("ERROR: Caught exception: %s", e.what());
-		Log::format("==========================================");
-		wstring msg = WString::toWString(e.what());
-		MessageBox(hwnd, msg.c_str(), L"Error", MB_OK | MB_ICONEXCLAMATION);
 	}
-	Log::format("Exiting run loop");
 }
 void DX11::createWindow() {
-	Log::format("Creating window");
+	Log::write("Creating window");
 	WNDCLASSEXW wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -198,7 +181,7 @@ void DX11::createWindow() {
 	UpdateWindow(hwnd);
 }
 void DX11::createDevice() {
-	Log::format("Creating DXGI factory");
+	Log::write("Creating DXGI factory");
 	uint factoryFlags = 0;
 #ifdef _DEBUG
 	factoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
@@ -207,7 +190,7 @@ void DX11::createDevice() {
 
 	selectAdapter();
 
-	Log::format("Creating device");
+	Log::write("Creating device");
 	uint creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #ifdef _DEBUG
 	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -234,7 +217,7 @@ void DX11::createDevice() {
 		throw std::runtime_error("Could not initialize Direct3D: " + Win::HRESULTToString(hr));
 	}
 	if(level==D3D_FEATURE_LEVEL_11_0) {
-		Log::format("\tFeature level 11.0 selected");
+		Log::write("\tFeature level 11.0 selected");
 	}
 
 	D3D11_VIEWPORT vp = {};
@@ -249,7 +232,7 @@ void DX11::createDevice() {
 	Log::format("================================================== DX11 ready");
 }
 void DX11::selectAdapter() {
-	Log::format("Enumerating adapters");
+	Log::write("Enumerating adapters");
 	ComPtr<IDXGIAdapter1> adapter1;
 	char str[128] = {};
 	ulong maxMemory = 0;
