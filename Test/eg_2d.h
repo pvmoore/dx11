@@ -60,7 +60,7 @@ public:
 	void mouseWheel(int delta, KeyMod mod) final override {
 		mouseScroll = delta;
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 		ulong number = frame.number/32;
 		float dir = (float)((number/256)&1);
 		float f = (number % 256) / 255.0f;
@@ -85,7 +85,7 @@ public:
 		}
 		quad1.update(frame);
 	}
-	void render(FrameResource& frame) final override {
+	void render(const FrameResource& frame) final override {
 		auto context = frame.context;
 		update(frame);
 		context->OMSetRenderTargets(1, frame.renderTargetView.GetAddressOf(), nullptr);

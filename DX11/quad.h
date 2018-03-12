@@ -68,7 +68,7 @@ public:
 		_texture = texture;
 		return *this;
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 		assert(isInitialised && cameraSet);
 		if(constantsChanged) {
 			updateConstants(frame);
@@ -77,7 +77,7 @@ public:
 			updatePipeline(frame);
 		}
 	}
-	void render(FrameResource& frame) {
+	void render(const FrameResource& frame) {
 		assert(isInitialised && cameraSet);
 
 		auto context = frame.context;
@@ -106,11 +106,11 @@ public:
 		}
 	}
 private:
-	void updateConstants(FrameResource& frame) {
+	void updateConstants(const FrameResource& frame) {
 		constantBuffer.write(frame.context);
 		constantsChanged = false;
 	}
-	void updatePipeline(FrameResource& frame) {
+	void updatePipeline(const FrameResource& frame) {
 		/// 0 --- 1
 		/// | \   |
 		/// |   \ |

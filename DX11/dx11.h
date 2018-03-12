@@ -14,7 +14,7 @@ public:
 	virtual void mouseMove(POINT pos, KeyMod mod) = 0;
 	virtual void mouseButton(int button, POINT pos, KeyMod mod, MouseClick click) = 0;
 	virtual void mouseWheel(int delta, KeyMod mod) = 0;
-	virtual void render(FrameResource& frame) = 0;
+	virtual void render(const FrameResource& frame) = 0;
 };
 struct MouseState final {
 	int2 pos;

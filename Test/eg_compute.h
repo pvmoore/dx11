@@ -56,10 +56,10 @@ public:
 
 		Log::format("Application setup finished");
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 
 	}
-	void render(FrameResource& frame) final override {
+	void render(const FrameResource& frame) final override {
 		update(frame);
 
 		auto context = frame.context;
