@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DX11_Lib">
+      <UniqueIdentifier>{a616c83c-844f-4595-91e2-6b33ccf77635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\Renderers">
+      <UniqueIdentifier>{b35dbcdf-87b0-4800-816a-9648373d28a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\Misc">
+      <UniqueIdentifier>{fcca121e-56bc-4996-adcc-2b4f094c1835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\Shaders">
+      <UniqueIdentifier>{1454503b-4a1c-4be6-9c49-cada39e8fcea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\External">
+      <UniqueIdentifier>{dc17cd2a-b8d5-4f69-a4bc-612788677e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\Source">
+      <UniqueIdentifier>{ee42d1f4-5a17-4acc-8326-1f41807b56b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11_Lib\Headers">
+      <UniqueIdentifier>{54193085-659d-49c1-8c33-50d318c5c8e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="quad.h">
+      <Filter>DX11_Lib\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>DX11_Lib\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="_pch.h">
+      <Filter>DX11_Lib\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="_defines.h">
+      <Filter>DX11_Lib\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="_exported.h">
+      <Filter>DX11_Lib\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DDSTextureLoader.h">
+      <Filter>DX11_Lib\External</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="dx11.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sampler.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="swapchain.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="textures.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\External\DDSTextureLoader.cpp">
+      <Filter>DX11_Lib\External</Filter>
+    </ClCompile>
+    <ClCompile Include="statics.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="dx11.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="shaders.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="swapchain.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="textures.cpp">
+      <Filter>DX11_Lib\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Resources\shaders\quad.hlsl">
+      <Filter>DX11_Lib\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\shaders\text.hlsl">
+      <Filter>DX11_Lib\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
