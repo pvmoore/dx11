@@ -4,12 +4,7 @@ using namespace core;
 #include "_exported.h"
 
 /// Set some statics
-
-FILE* Log::fp = nullptr;
 dx11::DX11* dx11::DX11::self = nullptr;
-
-/// Our singleton Log
-Log singletonLog;
 
 void throwOnDXError(HRESULT hr, const char* msg) {
 	if(FAILED(hr)) {

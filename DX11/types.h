@@ -64,6 +64,13 @@ struct float2 final {
 	constexpr float2 operator*(float2 o) const {
 		return {x*o.x, y*o.y};
 	}
+	constexpr float2 operator/(float o) const {
+		return {x/o, y/o};
+	}
+	constexpr float2 operator/(float2 o) const {
+		return {x/o.x, y/o.y};
+	}
+
 	constexpr void operator+=(float2 o) {
 		x += o.x; y += o.y;
 	}
@@ -163,5 +170,10 @@ struct Rect final {
 	constexpr float2 point() const { return {x, y}; }
 	constexpr float2 dimension() const { return {width, height}; }
 };
+
+inline DirectX::XMMATRIX inverse(DirectX::XMMATRIX m) {
+	XMVECTOR det[4];
+	return XMMatrixInverse(&det[0], m);
+}
 
 } /// dx11

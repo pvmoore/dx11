@@ -127,7 +127,7 @@ public:
 		_usage	   = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
 		_cpuAccess = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 
-		assert(_size%16==0 && "Constant buffers must be a multiple of 16 bytes");
+		assert(sizeof(T)%16==0 && "Constant buffers must be a multiple of 16 bytes");
 	}
 	void init(ComPtr<ID3D11Device> device) {
 		Buffer::init(device, sizeof(T), &data);

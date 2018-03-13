@@ -1,5 +1,10 @@
 #pragma once
-
+///
+/// Todo: 
+///		This recompiles from file each time a shader is created. If many shaders are in the same
+///		file then D3DCompile can be used instead to compile once and then the required shaders
+///		created from that.
+///
 namespace dx11 {
 
 struct VertexShader final {

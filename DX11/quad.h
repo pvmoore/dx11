@@ -144,7 +144,7 @@ private:
 		};
 
 		vertexShader = dx11.shaders.getVS(dx11.params.shadersDirectory + L"quad.hlsl");
-		pixelShader = dx11.shaders.getPS(dx11.params.shadersDirectory + L"quad.hlsl");
+		pixelShader  = dx11.shaders.getPS(dx11.params.shadersDirectory + L"quad.hlsl");
 
 		throwOnDXError(dx11.device->CreateInputLayout(
 			layout, 3,

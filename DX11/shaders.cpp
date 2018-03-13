@@ -119,6 +119,7 @@ ComPtr<ID3DBlob> Shaders::compile(const wstring& filename, string entry, string 
 	if(!File::exists(filename)) {
 		throw std::runtime_error(String::format("Shader file '%s' does not exist", WString::toString(filename).c_str()).c_str());
 	}
+	Log::format("Compiling shader %s", WString::toString(filename).c_str());
 
 	ComPtr<ID3DBlob> blob;
 	ComPtr<ID3DBlob> errors;

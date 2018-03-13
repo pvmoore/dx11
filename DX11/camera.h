@@ -141,6 +141,7 @@ public:
 	inline constexpr float3 up() const { return float3(_up); }
 	inline constexpr float3 forward() const { return float3(_forward); }
 	inline constexpr float aspectRatio() const { return (float)windowSize.x/windowSize.y; }
+	inline constexpr float fov() const { return _fov; }
 
 	string toString() const {
 		string s =
@@ -212,6 +213,9 @@ public:
 			recalculateViewProj = true;
 		}
 		return view;
+	}
+	XMMATRIX invV() {
+		return inverse(V());
 	}
 	XMMATRIX P() final override {
 		if(recalculateProj) {
