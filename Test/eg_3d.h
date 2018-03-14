@@ -68,7 +68,7 @@ public:
 		keyA     = vkCode=='A' && pressed;
 		keyZ     = vkCode=='Z' && pressed;
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 		bool cameraMoved = false;
 		if(frame.number==0) mousePos = oldMousePos = dx11.mousePos();
 		int2 mouseMovement = mousePos-oldMousePos;
@@ -112,7 +112,7 @@ public:
 
 		text.update(frame);
 	}
-	void render(FrameResource& frame) {
+	void render(const FrameResource& frame) final override {
 		auto context = frame.context;
 		update(frame);
 

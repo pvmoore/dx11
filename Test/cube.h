@@ -54,13 +54,13 @@ public:
 		constantsChanged = true;
 		return *this;
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 		assert(cameraSet);
 		if(constantsChanged) {
 			updateConstants(frame);
 		}
 	}
-	void render(FrameResource& frame) {
+	void render(const FrameResource& frame) {
 		assert(cameraSet);
 
 		auto context = frame.context;
@@ -82,7 +82,7 @@ public:
 		context->Draw(6*6, 0);
 	}
 private:
-	void updateConstants(FrameResource& frame) {
+	void updateConstants(const FrameResource& frame) {
 		constantBuffer.data.lightPos = float3(1000, 1000, 1000);
 		constantBuffer.data.model =
 			DirectX::XMMatrixScaling(_scale, _scale, _scale) *

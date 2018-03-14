@@ -103,12 +103,12 @@ public:
 		constantsChanged = true;
 		return *this;
 	}
-	void update(FrameResource& frame) {
+	void update(const FrameResource& frame) {
 		assert(isInitialised && cameraSet);
 		if(constantsChanged) updateConstants(frame);
 		if(pipelineChanged) updatePipeline(frame);
 	}
-	void render(FrameResource& frame) {
+	void render(const FrameResource& frame) {
 		assert(isInitialised && cameraSet);
 		if(numCharacters == 0) return;
 
@@ -144,11 +144,11 @@ public:
 		context->PSSetShaderResources(0, 1, nullsrvs);
 	}
 private:
-	void updateConstants(FrameResource& frame) {
+	void updateConstants(const FrameResource& frame) {
 		constantBuffer.write(frame.context);
 		constantsChanged = false;
 	}
-	void updatePipeline(FrameResource& frame) {
+	void updatePipeline(const FrameResource& frame) {
 		pipelineChanged = false;
 		numCharacters = countCharacters();
 		if(numCharacters == 0) return;
