@@ -45,9 +45,6 @@
     <ClInclude Include="buffer.h">
       <Filter>DX11_Lib\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>DX11_Lib\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="dx11.h">
       <Filter>DX11_Lib\Headers</Filter>
     </ClInclude>

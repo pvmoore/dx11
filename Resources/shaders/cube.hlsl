@@ -1,8 +1,9 @@
 
 cbuffer MatrixBuffer : register(b0) {
-	row_major matrix c_modelMatrix;
-	row_major matrix c_viewProj;
+	matrix c_modelMatrix;
+	matrix c_viewProj;
 	float3 c_lightPos;
+	float _pad;
 };
 struct VSInput {
 	float3 position	: POSITION;
@@ -24,10 +25,10 @@ SamplerState sampler1 : register(s0);
 
 PSInput VSMain(VSInput input) {
 	PSInput result;
-	float4 position_worldspace = mul(float4(input.position, 1), c_modelMatrix);
-	result.position = mul(position_worldspace, c_viewProj);
+	float4 position_worldspace = mul(c_modelMatrix, float4(input.position, 1));
+	result.position = mul(c_viewProj, position_worldspace);
 
-	result.normal_worldspace  = mul(float4(input.normal, 0), c_modelMatrix).xyz;
+	result.normal_worldspace  = mul(c_modelMatrix, float4(input.normal, 0)).xyz;
 	result.toLight_worldspace = c_lightPos - position_worldspace.xyz;
 
 	result.color    = input.color;
@@ -35,11 +36,11 @@ PSInput VSMain(VSInput input) {
 	return result;
 }
 float4 PSMain(PSInput input) : SV_TARGET {
-	float3 unitNormal = normalize(input.normal_worldspace);
+	float3 unitNormal  = normalize(input.normal_worldspace);
 	float3 unitToLight = normalize(input.toLight_worldspace);
-	float NdotL = dot(unitNormal, unitToLight);
-	float brightness = max(NdotL, 0.1) * 2;
-	float4 diffuse = brightness * input.color;
+	float NdotL		   = dot(unitNormal, unitToLight);
+	float brightness   = max(NdotL, 0.1) * 2;
+	float4 diffuse	   = brightness * input.color;
 
 	return texture1.Sample(sampler1, input.uv) * 
 		   texture2.Sample(sampler1, input.uv) *

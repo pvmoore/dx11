@@ -7,12 +7,12 @@ cbuffer ConstantBuffer : register(b0) {
 	float3 _pad;
 };
 cbuffer MatrixBuffer : register(b1) {
-	row_major matrix worldMatrix;
-	row_major matrix viewMatrix;
-	row_major matrix projMatrix;
+	matrix worldMatrix;
+	matrix viewMatrix;
+	matrix projMatrix;
 };
 struct VSInput {
-	float3 position	: POSITION;
+	float2 position	: POSITION;
 	float4 color	: COLOR;
 	float2 uv		: TEXCOORD;
 };
@@ -27,10 +27,10 @@ SamplerState sampler1 : register(s0);
 
 PSInput VSMain(VSInput input) {
 	PSInput result;
-	result.position = mul(float4(input.position, 1), worldMatrix);
-	result.position = mul(result.position, viewMatrix);
-	result.position = mul(result.position, projMatrix);
-	//result.position = float4(input.position, 1);
+
+	result.position = mul(worldMatrix, float4(input.position, 0, 1));
+	result.position = mul(viewMatrix, result.position);
+	result.position = mul(projMatrix, result.position);
 
 	result.color = saturate(input.color + c_value);
 	result.uv    = input.uv;

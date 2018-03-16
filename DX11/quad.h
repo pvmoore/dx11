@@ -16,7 +16,7 @@ class Quad {
 		float2 uv;
 	}; static_assert(8*4==sizeof(Vertex));
 	struct Constants final {
-		XMMATRIX viewProj;
+		matrix viewProj;
 	}; static_assert(16 * 4 == sizeof(Constants) && sizeof(Constants) % 16 == 0);
 
 	ComPtr<ID3D11InputLayout> inputLayout;
@@ -27,7 +27,7 @@ class Quad {
 	VertexShader vertexShader = {};
 	PixelShader pixelShader = {};
 	vector<Info> quads;
-	rgba _color = rgba(DirectX::Colors::White);
+	rgba _color = rgba(1,1,1,1);
 	uint maxVertices;
 	bool pipelineChanged = true;
 	bool constantsChanged = true;

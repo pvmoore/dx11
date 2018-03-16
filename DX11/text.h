@@ -18,7 +18,7 @@ class Text {
 		float size;
 	}; static_assert(9 * 4 == sizeof(Vertex));
 	struct Constants final {
-		XMMATRIX viewProj;
+		matrix viewProj;
 		rgba dropShadowColour   = rgba{0, 0, 0, 0.75};
 		float2 dropShadowOffset = float2{-0.0025, 0.0025};
 		float2 _pad;
@@ -39,7 +39,7 @@ class Text {
 	PixelShader pixelShader = {}, dsPixelShader = {};
 
 	float size;
-	rgba colour = DirectX::Colors::White;
+	rgba colour = rgba{1, 1, 1, 1};
 	vector<TextChunk> textChunks;
 	shared_ptr<Font> font;
 	int maxCharacters;

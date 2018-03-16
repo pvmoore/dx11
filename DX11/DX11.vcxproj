@@ -148,7 +148,6 @@
     <ClInclude Include="_defines.h" />
     <ClInclude Include="_pch.h" />
     <ClInclude Include="buffer.h" />
-    <ClInclude Include="camera.h" />
     <ClInclude Include="dx11.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="_exported.h" />

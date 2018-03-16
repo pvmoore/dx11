@@ -31,7 +31,7 @@ public:
 		text.init(dx11, dx11.fonts.get(L"arial"), true, 256)
 			.camera(camera2d)
 			.setSize(128)
-			.setColour(DirectX::Colors::Aquamarine)
+			.setColour({0.498039246f, 1.000000000f, 0.831372619f, 1.000000000f})
 			.appendText("Hello there!", 170, 100);
 
 		cube.init(dx11)
@@ -73,43 +73,42 @@ public:
 		if(frame.number==0) mousePos = oldMousePos = dx11.mousePos();
 		int2 mouseMovement = mousePos-oldMousePos;
 
-		/*if(mouseScroll>0) {
-			camera3d.moveForward(frame.delta * 200);
-			cameraMoved = true;
-		} else if(mouseScroll<0) {
-			camera3d.moveForward(frame.delta * -200);
-			cameraMoved = true;
-		}
-		mouseScroll = 0;*/
+		//if(mouseScroll>0) {
+		//	camera3d.moveForward(frame.delta * 200);
+		//	cameraMoved = true;
+		//} else if(mouseScroll<0) {
+		//	camera3d.moveForward(frame.delta * -200);
+		//	cameraMoved = true;
+		//}
+		//mouseScroll = 0;
 
 		if(keyA) {
-			camera3d.moveForward(frame.delta * 1);
+			camera3d.moveForward(frame.delta * 100);
 			cameraMoved = true;
 		} else if(keyZ) {
-			camera3d.moveForward(frame.delta * -1);
+			camera3d.moveForward(frame.delta * -100);
 			cameraMoved = true;
 		} else if(keyLeft) {
-			camera3d.yaw(frame.delta * -0.1f);
+			camera3d.yaw(frame.delta * -1.0f);
 			cameraMoved = true;
 		} else if(keyRight) {
-			camera3d.yaw(frame.delta * 0.1f);
+			camera3d.yaw(frame.delta * 1.0f);
 			cameraMoved = true;
 		} else if(keyUp) {
-			camera3d.pitch(frame.delta * 0.1f);
+			camera3d.pitch(frame.delta * 1.0f);
 			cameraMoved = true;
 		} else if(keyDown) {
-			camera3d.pitch(frame.delta * -0.1f);
+			camera3d.pitch(frame.delta * -1.0f);
 			cameraMoved = true;
 		}
 		
 		if(cameraMoved) {
 			cube.camera(camera3d);
-			Log::format("camera: %s", camera3d.position().toString().c_str());
+			Log::format("camera: %s -> %s", camera3d.position.toString().c_str(), camera3d.forward.toString().c_str());
 		}
 		angle += float3{1.0f, 0.5f, 0.1f}*50*frame.delta;
 		cube.rotate(angle);
 		cube.update(frame);
-
 		text.update(frame);
 	}
 	void render(const FrameResource& frame) final override {

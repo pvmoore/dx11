@@ -11,6 +11,7 @@ class ExampleComputeToTexture final : public BaseExample {
 	ComputeShader computeShader;
 	Quad quad;
 	Camera2D camera;
+	ComPtr<ID3D11RasterizerState> rasterizerState;
 public:
 	void init(HINSTANCE hInstance, int cmdShow) final override {
 		params.title = L"DX11 Compute To Texture Example";
@@ -37,6 +38,7 @@ public:
 
 		quad.init(dx11, 1)
 			.camera(camera)
+			.color({1, 1, 1, 1})
 			.quad({10,10}, TEXSIZE)
 			.sampler(sampler.sampler)
 			.texture(targetTexture.srv);
@@ -52,6 +54,18 @@ public:
 		readBuffer.write(dx11.context, indata1);
 
 		delete[] indata1;
+
+		/// Create the default rasteriser state
+		D3D11_RASTERIZER_DESC drd{};
+		drd.FillMode = D3D11_FILL_SOLID;
+		drd.CullMode = D3D11_CULL_BACK;
+		drd.FrontCounterClockwise = FALSE;
+		drd.DepthClipEnable = FALSE;
+		drd.ScissorEnable = FALSE;
+		drd.MultisampleEnable = FALSE;
+		drd.AntialiasedLineEnable = FALSE;
+		throwOnDXError(dx11.device->CreateRasterizerState(&drd, rasterizerState.GetAddressOf()));
+		dx11.context->RSSetState(rasterizerState.Get());
 
 		Log::format("Application setup finished");
 	}
@@ -76,8 +90,14 @@ public:
 		// Unbind the uav before using it as an srv in the quad rendering
 		ID3D11UnorderedAccessView* nulluavs[] = {nullptr};
 		context->CSSetUnorderedAccessViews(0, 1, nulluavs, nullptr);
-		
+
 		// Render the texture to the screen
+
+		context->OMSetRenderTargets(1, frame.renderTargetView.GetAddressOf(), nullptr);
+
+		float clearColor[] = {0.2f, 0.0f, 0.2f, 0.0f};
+		context->ClearRenderTargetView(frame.renderTargetView.Get(), clearColor);
+		
 		quad.render(frame);
 	}
 };

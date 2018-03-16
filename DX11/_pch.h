@@ -33,8 +33,6 @@
 #include <d3d11.h>	
 #include <dxgi1_6.h>
 #include <D3Dcompiler.h>
-#include <DirectXMath.h>
-#include <DirectXColors.h>
 #include <wrl.h>
 
 #ifdef _DEBUG
@@ -63,11 +61,9 @@ using std::chrono::high_resolution_clock;
 
 using Microsoft::WRL::ComPtr;
 
-using DirectX::XMMATRIX;
-using DirectX::XMVECTOR;
-
 #include "../External/DDSTextureLoader.h"
 #include "../External/stb_image.h"
 #include "../../Core/Core/core.h"
+#include "../../Maths/Maths/maths.h"
 
 #include "_defines.h"

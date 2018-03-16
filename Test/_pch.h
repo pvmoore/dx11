@@ -36,8 +36,6 @@
 #include <d3d11.h>	
 #include <dxgi1_6.h>
 #include <D3Dcompiler.h>
-#include <DirectXMath.h>
-#include <DirectXColors.h>
 #include <wrl.h>
 #ifdef _DEBUG
 #include <dxgidebug.h>
@@ -64,12 +62,18 @@ using std::chrono::high_resolution_clock;
 
 using Microsoft::WRL::ComPtr;
 
-using namespace DirectX;
-
 /// Core
 #include "../../Core/Core/core.h"
 #ifdef _DEBUG
 #pragma comment(lib, "../../Core/x64/Debug/Core.lib")
 #else 
 #pragma comment(lib, "../../Core/x64/Release/Core.lib")
+#endif
+
+/// Maths
+#include "../../Maths/Maths/maths.h"
+#ifdef _DEBUG
+#pragma comment(lib, "../../Maths/x64/Debug/Maths.lib")
+#else 
+#pragma comment(lib, "../../Maths/x64/Release/Maths.lib")
 #endif

@@ -2,18 +2,18 @@
 
 class Example2D final : public BaseExample {
 	struct Vertex final {
-		XMFLOAT3 pos;
-		XMFLOAT4 color;
-		XMFLOAT2 uv;
-	}; static_assert(36==sizeof(Vertex));
+		float2 pos;
+		float4 color;
+		float2 uv;
+	}; static_assert(32==sizeof(Vertex));
 	struct Constants final {
 		float value;
-		XMFLOAT3 _pad;
+		float3 _pad;
 	}; static_assert(sizeof(Constants)%16==0);
 	struct Constants2 final {
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX proj;
+		matrix world;
+		matrix view;
+		matrix proj;
 	}; static_assert(sizeof(Constants2)%16==0);
 	VertexBuffer<Vertex> vertexBuffer;
 	ConstantBuffer<Constants> constantBuffer;
@@ -121,13 +121,13 @@ private:
 		/// |   \ |
 		/// 3 --- 2
 		const Vertex vertices[] = {
-			{{0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // 0
-			{{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}, // 1	
-			{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}, // 2
+			{{0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // 0
+			{{1.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}, // 1	
+			{{1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}, // 2
 
-			{{0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // 0
-			{{1.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}, // 2
-			{{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}  // 3
+			{{0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // 0
+			{{1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}, // 2
+			{{0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}  // 3
 		};
 		const uint vertexBufferSize = sizeof(vertices);
 	
@@ -136,16 +136,17 @@ private:
 		constantBuffer.data.value = 0;
 		constantBuffer.init(dx11.device);
 
-		constantBuffer2.data.world =
-			XMMatrixScaling(300, 300, 0) *
-			XMMatrixRotationZ(Math::toRadians(0)) *
-			XMMatrixTranslation(10, 10, 0);
+		constantBuffer2.data.world = 
+			//matrix::rotateZ(toRadians(45)) *
+			matrix::translate(float3{10, 10, 0}) *
+			matrix::scale(float3{300, 300, 0});
+		
 		constantBuffer2.data.view = camera2d.V();
 		constantBuffer2.data.proj = camera2d.P();
 		constantBuffer2.init(dx11.device);
 
 		const D3D11_INPUT_ELEMENT_DESC layout[] = {
-			{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,       0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 			{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 			{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 	    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
@@ -177,9 +178,9 @@ private:
 		dx11.context->PSSetSamplers(0, 1, sampler1.GetAddressOf());
 
 		/// Create the default rasteriser state
-		D3D11_RASTERIZER_DESC drd = {};
+		D3D11_RASTERIZER_DESC drd{};
 		drd.FillMode = D3D11_FILL_SOLID;
-		drd.CullMode = D3D11_CULL_NONE;
+		drd.CullMode = D3D11_CULL_BACK;
 		drd.FrontCounterClockwise = FALSE;
 		drd.DepthClipEnable = FALSE;
 		drd.ScissorEnable = FALSE;

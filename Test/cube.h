@@ -10,9 +10,10 @@ class Cube final {
 		float2 uv;
 	}; static_assert(12*4==sizeof(Vertex));
 	struct Constants final {
-		XMMATRIX model;
-		XMMATRIX viewProj;
+		matrix model;
+		matrix viewProj;
 		float3 lightPos;
+		float _pad;
 	}; static_assert(sizeof(Constants)%16==0);
 
 	VertexBuffer<Vertex> vertexBuffer = {};
@@ -84,23 +85,23 @@ public:
 private:
 	void updateConstants(const FrameResource& frame) {
 		constantBuffer.data.lightPos = float3(1000, 1000, 1000);
-		constantBuffer.data.model =
-			DirectX::XMMatrixScaling(_scale, _scale, _scale) *
-			DirectX::XMMatrixRotationX(_rotation.x) *
-			DirectX::XMMatrixRotationY(_rotation.y) *
-			DirectX::XMMatrixRotationZ(_rotation.z) *
-			DirectX::XMMatrixTranslation(_pos.x, _pos.y, _pos.z);
+		constantBuffer.data.model = 
+			matrix::translate(_pos) *
+			matrix::rotateZ(_rotation.z) *
+			matrix::rotateY(_rotation.y) *
+			matrix::rotateX(_rotation.x) *
+			matrix::scale({_scale, _scale, _scale});
 		constantBuffer.write(frame.context);
 		constantsChanged = false;
 	}
 	void setupPipeline(DX11& dx11) {
 
-		const rgba c1 = DirectX::Colors::Green;
-		const rgba c2 = DirectX::Colors::LightBlue;
-		const rgba c3 = DirectX::Colors::Gray;
-		const rgba c4 = DirectX::Colors::Aquamarine;
-		const rgba c5 = DirectX::Colors::White;
-		const rgba c6 = DirectX::Colors::SteelBlue;
+		const rgba c1 = {0.000000000f, 0.501960814f, 0.000000000f, 1.000000000f}; // green
+		const rgba c2 = {0.678431392f, 0.847058892f, 0.901960850f, 1.000000000f};
+		const rgba c3 = {0.501960814f, 0.501960814f, 0.501960814f, 1.000000000f};
+		const rgba c4 = {0.498039246f, 1.000000000f, 0.831372619f, 1.000000000f};
+		const rgba c5 = {1, 1, 1, 1};
+		const rgba c6 = {0.274509817f, 0.509803951f, 0.705882370f, 1.000000000f};
 
 		const Vertex vertices[] = {
 			/// front

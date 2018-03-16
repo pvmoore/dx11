@@ -1,6 +1,6 @@
 
 cbuffer MatrixBuffer : register(b0) {
-	row_major matrix c_viewProj;
+	matrix c_viewProj;
 	float4 c_dsColour;
 	float2 c_dsOffset;
 	float2 _pad;
@@ -23,7 +23,7 @@ SamplerState sampler1 : register(s0);
 
 PSInput VSMain(VSInput input) {
 	PSInput result;
-	result.position = mul(float4(input.position, 0, 1), c_viewProj);
+	result.position = mul(c_viewProj, float4(input.position, 0, 1));
 	result.color    = input.color;
 	result.uv       = input.uv;
 	result.size     = input.size;
