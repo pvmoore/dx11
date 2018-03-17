@@ -194,6 +194,9 @@ void DX11::createDevice() {
 	uint creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #ifdef _DEBUG
 	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    if(params.adapter == Adapter::SOFTWARE) {
+        creationFlags |= D3D11_CREATE_DEVICE_DEBUGGABLE;
+    }
 #endif
 	const D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_11_0
@@ -220,6 +223,17 @@ void DX11::createDevice() {
 		Log::write("\tFeature level 11.0 selected");
 	}
 
+#ifdef _DEBUG
+    ComPtr<ID3D11Debug> d3dDebug;
+    if(SUCCEEDED(device.As(&d3dDebug))) {
+        if(SUCCEEDED(d3dDebug.As(&infoQueue))) {
+            infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, true);
+            infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, true);
+            infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_WARNING, true);
+        }
+    }
+#endif
+
 	D3D11_VIEWPORT vp = {};
 	vp.Width    = (float)params.width;
 	vp.Height   = (float)params.height;
@@ -237,6 +251,7 @@ void DX11::selectAdapter() {
 	char str[128] = {};
 	ulong maxMemory = 0;
 	uint selected = 0;
+    Adapter selectedType;
 	for(uint i = 0; factory->EnumAdapters1(i, adapter1.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; i++) {
 		Log::format("\tAdapter %d {", i);
 		DXGI_ADAPTER_DESC1 desc;
@@ -253,13 +268,21 @@ void DX11::selectAdapter() {
 		Log::format("\t\tDescription: %s", str);
 		Log::format("\t\tType: %s", isSoftware ? "SOFTWARE" : "HARDWARE");
 		Log::format("\t}");
-		if(!isSoftware && desc.DedicatedVideoMemory > maxMemory) {
-			maxMemory = desc.DedicatedSystemMemory;
-			adapter1.As(&adapter);
-			selected = i;
-		}
+
+        if(params.adapter == Adapter::HARDWARE) {
+            if(!isSoftware && desc.DedicatedVideoMemory > maxMemory) {
+                maxMemory = desc.DedicatedSystemMemory;
+                adapter1.As(&adapter);
+                selected = i;
+                selectedType = Adapter::HARDWARE;
+            }
+        } else if(isSoftware) {
+            adapter1.As(&adapter);
+            selected = i;
+            selectedType = Adapter::SOFTWARE;
+        }
 	}
-	Log::format("\tSelected adapter %u", selected);
+	Log::format("\tSelected %s adapter %u", toString(selectedType).c_str(), selected);
 }
 /// static 
 LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {

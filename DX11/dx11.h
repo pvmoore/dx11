@@ -5,9 +5,15 @@ namespace dx11 {
 enum KeyMod : uint { NONE = 0, CTRL = 1, SHIFT = 2 };
 enum MouseClick : uint { PRESS, RELEASE, DBLCLICK };
 enum WindowMode : uint { WINDOWED, WINDOWED_FULLSCREEN }; // FULLSCREEN
+enum Adapter : uint { HARDWARE, SOFTWARE };
+
+inline std::string toString(Adapter a) { return std::string(a==Adapter::HARDWARE ? "HARDWARE" : "SOFTWARE"); }
+
 inline KeyMod operator|(KeyMod a, KeyMod b) {
 	return (KeyMod)((uint)a | (uint)b);
 }
+
+
 class InputEventHandler {
 public:
 	virtual void key(int vkCode, bool pressed) = 0;
@@ -26,6 +32,7 @@ struct InitParams final {
 	bool vsync = false;
 	wstring title = L"No title";
 	wstring shadersDirectory = L"./";
+    Adapter adapter = Adapter::HARDWARE;
 };
 //========================================================================================
 class DX11 final {
@@ -46,6 +53,7 @@ public:
 	class Textures textures{*this};
 	class Fonts fonts{*this};
 	class SwapChain swapChain{*this};
+    ComPtr<ID3D11InfoQueue> infoQueue;
 
 	DX11();
 	~DX11();

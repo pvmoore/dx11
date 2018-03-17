@@ -16,7 +16,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
 #endif
 
-#define TEST 1
+#define TEST 3
 
 #if TEST==1
 	Example2D app;
@@ -26,6 +26,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	ExampleCompute app;
 #elif TEST==4
 	ExampleComputeToTexture app;
+#elif TEST==5
+    ExampleShaderPrintf app;
 #endif
 	try{
 		app.init(hInstance, nCmdShow);

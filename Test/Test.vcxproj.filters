@@ -47,6 +47,9 @@
     <ClInclude Include="_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="eg_shader_printf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.log">
@@ -64,6 +67,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\shaders\compute.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\shaders\printf.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
