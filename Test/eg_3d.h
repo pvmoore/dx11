@@ -23,7 +23,7 @@ public:
 	void setup() final override {
 		Log::format("Application setup");
 		camera3d.init(dx11.windowSize(), {0, 0, 100}, {0, 1, 0}, {0, 0, 0});
-		camera3d.fovNearFar(Math::toRadians(60), 10, 100000);
+		camera3d.fovNearFar(maths::toRadians(60), 10, 100000);
 		Log::format("camera: %s", camera3d.toString().c_str());
 
 		camera2d.init(dx11.windowSize());

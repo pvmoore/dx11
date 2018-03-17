@@ -46,7 +46,7 @@ public:
 		return *this;
 	}
 	Cube& rotate(float3 degs) {
-		_rotation = {Math::toRadians(degs.x), Math::toRadians(degs.y), Math::toRadians(degs.z)};
+		_rotation = {maths::toRadians(degs.x), maths::toRadians(degs.y), maths::toRadians(degs.z)};
 		constantsChanged = true;
 		return *this;
 	}
