@@ -269,7 +269,7 @@ LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	};
 	const auto handleMouseButton = [=](int button, MouseClick click) {
 		if(self->eventHandler) {
-			POINT pos = {LOWORD(lParam), HIWORD(lParam)};
+			int2 pos = {LOWORD(lParam), HIWORD(lParam)};
 			self->eventHandler->mouseButton(button, pos, getKeyMod(), click);
 		}
 	};

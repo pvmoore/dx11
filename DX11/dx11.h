@@ -11,8 +11,8 @@ inline KeyMod operator|(KeyMod a, KeyMod b) {
 class InputEventHandler {
 public:
 	virtual void key(int vkCode, bool pressed) = 0;
-	virtual void mouseMove(POINT pos, KeyMod mod) = 0;
-	virtual void mouseButton(int button, POINT pos, KeyMod mod, MouseClick click) = 0;
+	virtual void mouseMove(int2 pos, KeyMod mod) = 0;
+	virtual void mouseButton(int button, int2 pos, KeyMod mod, MouseClick click) = 0;
 	virtual void mouseWheel(int delta, KeyMod mod) = 0;
 	virtual void render(const FrameResource& frame) = 0;
 };

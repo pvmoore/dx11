@@ -54,8 +54,8 @@ public:
 
 		Log::format("Application setup finished");
 	}
-	void mouseMove(POINT pos, KeyMod mod) final override {
-		mousePos = int2{pos.x, pos.y};
+	void mouseMove(int2 pos, KeyMod mod) final override {
+		mousePos = pos;
 	}
 	void mouseWheel(int delta, KeyMod mod) final override {
 		mouseScroll = delta;
