@@ -4,16 +4,8 @@ class ExampleShaderPrintf final : public BaseExample {
     static constexpr int N = 64;
     static constexpr int workgroupSize = 64;
 
-    struct PrintfBufType final {
-        uint flags;
-        uint counter;
-        float f[1024*1024];
-    };
-
-    RWStructuredBuffer<PrintfBufType> printfBuffer;
+    ShaderPrintf shaderPrintf;
     ComputeShader computeShader;
-    
-    PrintfBufType scratch;
 public:
     void init(HINSTANCE hInstance, int cmdShow) final override {
         params.title = L"DX11 Shader Printf Example";
@@ -28,7 +20,8 @@ public:
 
         computeShader = dx11.shaders.getCS(L"../Resources/shaders/printf.hlsl");
 
-        printfBuffer.init(dx11.device, 1);
+        shaderPrintf.init(dx11.device, 7, true)
+                    .setFloatFormat("%.3f");
 
         Log::format("Application setup finished");
     }
@@ -42,17 +35,15 @@ public:
 
         context->CSSetShader(computeShader, nullptr, 0);
 
-        context->CSSetUnorderedAccessViews(0, 1, printfBuffer.uav.GetAddressOf(), nullptr);
-
+        shaderPrintf.before(frame);
         context->Dispatch(N / workgroupSize, 1, 1);
+        shaderPrintf.after(frame);
 
-        /// Copy to staging and read the results
-       /* context->CopyResource(stagingRead.handle.Get(), out.handle.Get());
-        stagingRead.read(context, scratch);
-        for(int i = 0; i < N; i++) {
-            assert(scratch[i].i == i * 2);
-            assert(scratch[i].f == (float)(i * 2) + 10.0f);
-        }*/
+        if(shaderPrintf.hasOutput()) {
+            Log::write("##################### Printf output: \n", 
+                       shaderPrintf.getOutput(), 
+                       "#####################");
+        }
 
         /// Unset our shader
         context->CSSetShader(nullptr, nullptr, 0);

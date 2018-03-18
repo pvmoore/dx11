@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\External\DDSTextureLoader.h" />
+    <ClInclude Include="shader_printf.h" />
     <ClInclude Include="_defines.h" />
     <ClInclude Include="_pch.h" />
     <ClInclude Include="buffer.h" />

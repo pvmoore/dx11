@@ -14,5 +14,5 @@ void throwOnDXError(HRESULT hr, const char* msg = nullptr);
 #include "dx11.h"
 #include "quad.h"
 #include "text.h"
-
+#include "shader_printf.h"
 

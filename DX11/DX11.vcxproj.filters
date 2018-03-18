@@ -66,6 +66,9 @@
     <ClInclude Include="types.h">
       <Filter>DX11_Lib\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="shader_printf.h">
+      <Filter>DX11_Lib\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\External\DDSTextureLoader.cpp">
