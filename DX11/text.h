@@ -19,8 +19,8 @@ class Text {
 	}; static_assert(9 * 4 == sizeof(Vertex));
 	struct Constants final {
 		matrix viewProj;
-		rgba dropShadowColour   = rgba{0, 0, 0, 0.75};
-		float2 dropShadowOffset = float2{-0.0025, 0.0025};
+		rgba dropShadowColour   = rgba{0, 0, 0, 0.75f};
+		float2 dropShadowOffset = float2{-0.0025f, 0.0025f};
 		float2 _pad;
 	}; static_assert(24 * 4 == sizeof(Constants) && sizeof(Constants)%16==0);
 	struct TextChunk final {
