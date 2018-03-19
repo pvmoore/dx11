@@ -33,7 +33,8 @@ void DX11::init(HINSTANCE hInstance,
 void DX11::run() {
 	MSG msg;
 	float delta = 1;
-	auto lastFrameTimestamp = high_resolution_clock::now();
+    auto startTimestamp     = high_resolution_clock::now();
+	auto lastFrameTimestamp = startTimestamp;
 	uint prev5Seconds;
 	uint prevSecond = prev5Seconds = (uint)(lastFrameTimestamp.time_since_epoch().count() * 1e-9);
 
@@ -51,6 +52,7 @@ void DX11::run() {
 		frame.context = context;
 		frame.number = frameNumber;
 		frame.delta = delta;
+        frame.nsecs = (high_resolution_clock::now() - startTimestamp).count();
 
 		/// Let the client render now
 		eventHandler->render(frame);

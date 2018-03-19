@@ -71,7 +71,7 @@ shared_ptr<Font> Fonts::get(const wstring& name) {
 	font.name = name;
 	readFontPage(font);
 	readFontTexture(font);
-	Log::format("Loaded font %s%s", directory.c_str(), name.c_str());
+	Log::format("Loaded font %s%s", WString::toString(directory).c_str(), WString::toString(name).c_str());
 
 	fonts[name] = std::make_shared<Font>(font);
 	return fonts[name];

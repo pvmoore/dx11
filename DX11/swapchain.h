@@ -4,10 +4,13 @@ namespace dx11 {
 
 struct FrameResource final {
 	ulong number;			/// frame number
+    ulong nsecs;            /// Total nsecs since run() was called
 	float delta;			/// multiply by this to meet per second rate (1fps = 1, 2fps = 0.5, 0.5fps=2)
 	ComPtr<ID3D11RenderTargetView> renderTargetView;
 	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
+
+    ulong secondsSinceStart() const { return nsecs / 1'000'000'000; }
 };
 
 class SwapChain final {
