@@ -24,6 +24,8 @@ void DX11::init(HINSTANCE hInstance,
 	this->params	   = params;
 	this->eventHandler = eventHandler;
 
+    fonts.setDirectory(params.fontsDirectory);
+
 	createWindow();
 	createDevice();
 	swapChain.init();

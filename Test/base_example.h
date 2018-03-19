@@ -7,6 +7,7 @@ protected:
 public:
 	virtual void init(HINSTANCE hInstance, int cmdShow) {
 		params.shadersDirectory = L"../Resources/shaders/";
+        params.fontsDirectory   = L"../Resources/fonts/";
 		dx11.init(hInstance, params, this);
 		setup();
 		dx11.showWindow(cmdShow);

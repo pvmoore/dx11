@@ -62,7 +62,7 @@ Rect Font::getRect(const string& text, float size) {
 	return r;
 }
 
-shared_ptr<Font> Fonts::get(wstring name) {
+shared_ptr<Font> Fonts::get(const wstring& name) {
 	auto iter = fonts.find(name);
 	if(iter != fonts.end()) {
 		return iter->second;

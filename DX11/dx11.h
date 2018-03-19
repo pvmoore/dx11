@@ -32,6 +32,7 @@ struct InitParams final {
 	bool vsync = false;
 	wstring title = L"No title";
 	wstring shadersDirectory = L"./";
+    wstring fontsDirectory   = L"./";
     Adapter adapter = Adapter::HARDWARE;
 };
 //========================================================================================
