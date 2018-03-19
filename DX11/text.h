@@ -65,7 +65,7 @@ public:
 		constantsChanged = true;
 		return *this;
 	}
-	Text& appendText(string text, int x = 0, int y = 0) {
+	Text& appendText(const string& text, int x = 0, int y = 0) {
 		TextChunk chunk;
 		chunk.text = text;
 		chunk.colour = colour;
@@ -76,8 +76,10 @@ public:
 		pipelineChanged = true;
 		return *this;
 	}
-	Text& replaceText(int index, string& text) {
-		throw std::runtime_error("implement me");
+	Text& replaceText(uint index, const string& text) {
+		assert(textChunks.size()>index);
+        textChunks[index].text = text;
+        pipelineChanged = true;
 		return *this;
 	}
 	Text& clear() {
