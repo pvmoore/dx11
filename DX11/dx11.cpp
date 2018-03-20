@@ -290,17 +290,38 @@ void DX11::selectAdapter() {
 }
 /// static 
 LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	const auto getKeyMod = [=]()->KeyMod {
+	const auto getKeyMod = [wParam]()->KeyMod {
 		return ((wParam&MK_CONTROL) ? KeyMod::CTRL      : KeyMod::NONE) |
 			   ((wParam&MK_SHIFT)   ? KeyMod::SHIFT     : KeyMod::NONE) |
                ((wParam&MK_LBUTTON) ? KeyMod::LEFT_MB   : KeyMod::NONE) |
                ((wParam&MK_MBUTTON) ? KeyMod::MIDDLE_MB : KeyMod::NONE) |
                ((wParam&MK_RBUTTON) ? KeyMod::RIGHT_MB  : KeyMod::NONE);
 	};
-	const auto handleMouseButton = [=](int button, MouseClick click) {
-		if(self->eventHandler) {
-			int2 pos = {LOWORD(lParam), HIWORD(lParam)};
-			self->eventHandler->mouseButton(button, pos, getKeyMod(), click);
+    const auto updateMouseDrag = [=](uint button, int2 pos)->void {
+        if(self->mouseState.drag.dragging) {
+            if(!self->mouseState.button[self->mouseState.drag.button]) {
+                self->mouseState.drag.dragging = false;
+                self->mouseState.drag.end = pos;
+                if(self->eventHandler && self->mouseState.drag.start != pos) {
+                    self->eventHandler->mouseDragEnd(self->mouseState.drag);
+                }
+            }
+        } else { /// not currently dragging
+            if(self->mouseState.button[button]) {
+                self->mouseState.drag.dragging = true;
+                self->mouseState.drag.start = pos;
+                self->mouseState.drag.button = button;
+            }
+        }
+    };
+	const auto handleMouseButton = [=](uint button, MouseClick click) {
+		int2 pos = {LOWORD(lParam), HIWORD(lParam)};
+        self->mouseState.button[button] = click==MouseClick::PRESS;
+
+        updateMouseDrag(button, pos);
+
+        if(self->eventHandler) {
+            self->eventHandler->mouseButton(button, pos, getKeyMod(), click);
 		}
 	};
 	const auto handleKey = [=](bool pressed) {
@@ -321,12 +342,19 @@ LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 		case WM_KEYUP:
 			handleKey(false);
 			break;
-		case WM_MOUSEMOVE:
-			if(self->eventHandler) {
-				self->eventHandler->mouseMove({LOWORD(lParam), HIWORD(lParam)}, getKeyMod());
-			}
-			self->mouseState.pos = {LOWORD(lParam), HIWORD(lParam)};
-			break;
+		case WM_MOUSEMOVE: {
+            int2 pos = {LOWORD(lParam), HIWORD(lParam)};
+            self->mouseState.pos = pos;
+
+            updateMouseDrag(0, pos);
+            updateMouseDrag(1, pos);
+            updateMouseDrag(2, pos);
+
+            if(self->eventHandler) {
+                self->eventHandler->mouseMove(pos, self->mouseState.drag, getKeyMod());
+            }
+            break;
+        }
 		case WM_MOUSEWHEEL:
 			if(self->eventHandler) {
 				self->eventHandler->mouseWheel((short)HIWORD(wParam), getKeyMod());

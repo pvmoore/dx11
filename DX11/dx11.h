@@ -12,17 +12,25 @@ inline std::string toString(Adapter a) { return std::string(a==Adapter::HARDWARE
 inline KeyMod operator|(KeyMod a, KeyMod b) {
 	return (KeyMod)((uint)a | (uint)b);
 }
-
+struct MouseDrag final {
+    bool dragging = false;
+    uint button;
+    int2 start;
+    int2 end;
+};
+struct MouseState final {
+    int2 pos;
+    bool button[3];
+    MouseDrag drag;
+};
 class InputEventHandler {
 public:
     virtual void key(int vkCode, bool pressed) {}
-    virtual void mouseMove(int2 pos, KeyMod mod) {}
+    virtual void mouseMove(int2 pos, MouseDrag drag, KeyMod mod) {}
     virtual void mouseButton(uint button, int2 pos, KeyMod mod, MouseClick click) {}
+    virtual void mouseDragEnd(MouseDrag drag) {}
     virtual void mouseWheel(int delta, KeyMod mod) {}
     virtual void render(const FrameResource& frame) {}
-};
-struct MouseState final {
-	int2 pos;
 };
 struct InitParams final {
 	uint width = 400;
@@ -41,8 +49,8 @@ class DX11 final {
 public:
 	HINSTANCE hInstance = nullptr;
 	HWND hwnd = nullptr;
-	InitParams params = {};
-	MouseState mouseState = {};
+	InitParams params{};
+	MouseState mouseState{};
 	InputEventHandler* eventHandler;
 	ulong frameNumber = 0;
 	ComPtr<IDXGIFactory2> factory;
