@@ -26,9 +26,9 @@ struct MouseState final {
 class InputEventHandler {
 public:
     virtual void key(int vkCode, bool pressed) {}
-    virtual void mouseMove(int2 pos, MouseDrag drag, KeyMod mod) {}
-    virtual void mouseButton(uint button, int2 pos, KeyMod mod, MouseClick click) {}
-    virtual void mouseDragEnd(MouseDrag drag) {}
+    virtual void mouseMove(const int2 pos, const MouseDrag drag, KeyMod mod) {}
+    virtual void mouseButton(uint button, const int2 pos, KeyMod mod, MouseClick click) {}
+    virtual void mouseDragEnd(const MouseDrag drag) {}
     virtual void mouseWheel(int delta, KeyMod mod) {}
     virtual void render(const FrameResource& frame) {}
 };
