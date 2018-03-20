@@ -2,7 +2,7 @@
 
 namespace dx11 {
 
-enum KeyMod : uint { NONE = 0, CTRL = 1, SHIFT = 2 };
+enum KeyMod : uint { NONE = 0, CTRL = 1, SHIFT = 2, LEFT_MB = 4, MIDDLE_MB = 8, RIGHT_MB = 16 };
 enum MouseClick : uint { PRESS, RELEASE, DBLCLICK };
 enum WindowMode : uint { WINDOWED, WINDOWED_FULLSCREEN }; // FULLSCREEN
 enum Adapter : uint { HARDWARE, SOFTWARE };
@@ -12,7 +12,6 @@ inline std::string toString(Adapter a) { return std::string(a==Adapter::HARDWARE
 inline KeyMod operator|(KeyMod a, KeyMod b) {
 	return (KeyMod)((uint)a | (uint)b);
 }
-
 
 class InputEventHandler {
 public:

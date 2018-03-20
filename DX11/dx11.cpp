@@ -291,8 +291,11 @@ void DX11::selectAdapter() {
 /// static 
 LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	const auto getKeyMod = [=]()->KeyMod {
-		return ((wParam&MK_CONTROL) ? KeyMod::CTRL : KeyMod::NONE) |
-			((wParam&MK_SHIFT) ? KeyMod::SHIFT : KeyMod::NONE);
+		return ((wParam&MK_CONTROL) ? KeyMod::CTRL      : KeyMod::NONE) |
+			   ((wParam&MK_SHIFT)   ? KeyMod::SHIFT     : KeyMod::NONE) |
+               ((wParam&MK_LBUTTON) ? KeyMod::LEFT_MB   : KeyMod::NONE) |
+               ((wParam&MK_MBUTTON) ? KeyMod::MIDDLE_MB : KeyMod::NONE) |
+               ((wParam&MK_RBUTTON) ? KeyMod::RIGHT_MB  : KeyMod::NONE);
 	};
 	const auto handleMouseButton = [=](int button, MouseClick click) {
 		if(self->eventHandler) {
