@@ -19,7 +19,7 @@ public:
 		assert(isInitialised);
 		if(length==0) length = _size;
 		if(_usage==D3D11_USAGE::D3D11_USAGE_DYNAMIC) {
-			D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+			D3D11_MAPPED_SUBRESOURCE mappedResource{};
 			throwOnDXError(context->Map(handle.Get(), 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
 			memcpy((ubyte*)mappedResource.pData+offset, data, length);
 			context->Unmap(handle.Get(), 0);
