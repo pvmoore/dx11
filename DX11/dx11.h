@@ -15,11 +15,11 @@ inline KeyMod operator|(KeyMod a, KeyMod b) {
 
 class InputEventHandler {
 public:
-	virtual void key(int vkCode, bool pressed) = 0;
-	virtual void mouseMove(int2 pos, KeyMod mod) = 0;
-	virtual void mouseButton(int button, int2 pos, KeyMod mod, MouseClick click) = 0;
-	virtual void mouseWheel(int delta, KeyMod mod) = 0;
-	virtual void render(const FrameResource& frame) = 0;
+    virtual void key(int vkCode, bool pressed) {}
+    virtual void mouseMove(int2 pos, KeyMod mod) {}
+    virtual void mouseButton(uint button, int2 pos, KeyMod mod, MouseClick click) {}
+    virtual void mouseWheel(int delta, KeyMod mod) {}
+    virtual void render(const FrameResource& frame) {}
 };
 struct MouseState final {
 	int2 pos;

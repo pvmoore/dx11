@@ -15,8 +15,4 @@ public:
 	virtual void shutdown() {};
 	virtual void setup() = 0;
 	void run() { dx11.run(); shutdown(); }
-	virtual void key(int vkCode, bool pressed) {}
-	virtual void mouseMove(int2 pos, KeyMod mod) {}
-	virtual void mouseButton(int button, int2 pos, KeyMod mod, MouseClick click) {}
-	virtual void mouseWheel(int delta, KeyMod mod) {}
 };
