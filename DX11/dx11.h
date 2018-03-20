@@ -22,6 +22,10 @@ struct MouseState final {
     int2 pos;
     bool button[3];
     MouseDrag drag;
+    int wheelDelta = 0;
+
+    void resetWheelDelta() { wheelDelta = 0; }
+    void resetDragStart() { drag.start = pos; }
 };
 class InputEventHandler {
 public:

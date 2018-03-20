@@ -359,6 +359,7 @@ LRESULT DX11::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 			if(self->eventHandler) {
 				self->eventHandler->mouseWheel((short)HIWORD(wParam), getKeyMod());
 			}
+            self->mouseState.wheelDelta += (short)HIWORD(wParam);
 			break;
 		case WM_LBUTTONDBLCLK:
 			handleMouseButton(0, MouseClick::DBLCLICK);
