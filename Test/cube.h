@@ -212,8 +212,9 @@ private:
 			{"TEXCOORD", 0, F32x2, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
 
-		vertexShader = dx11.shaders.getVS(L"../Resources/shaders/cube.hlsl");
-		pixelShader  = dx11.shaders.getPS(L"../Resources/shaders/cube.hlsl");
+        ShaderArgs args{};
+        vertexShader = dx11.shaders.makeVS(L"../Resources/shaders/cube.hlsl", args);
+		pixelShader  = dx11.shaders.makePS(L"../Resources/shaders/cube.hlsl", args);
 
 		throwOnDXError(dx11.device->CreateInputLayout(
 			layout, 4,

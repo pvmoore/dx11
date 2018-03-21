@@ -26,11 +26,11 @@ public:
 
 		camera.init(dx11.windowSize());
 
-		vector<D3D_SHADER_MACRO> defines;
-		defines.push_back({"WG_X", "8"});
-		defines.push_back({"WG_Y", "8"});
-		defines.push_back({});
-		computeShader = dx11.shaders.getCS(L"../Resources/shaders/compute_to_texture.hlsl", "CSMain", defines.data());
+        ShaderArgs args;
+        args.define("WG_X", "8")
+            .define("WG_Y", "8")
+            .entry("CSMain");
+        computeShader = dx11.shaders.makeCS(L"../Resources/shaders/compute_to_texture.hlsl", args);
 
 		targetTexture.init(dx11.device, TEXSIZE, DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
 

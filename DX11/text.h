@@ -235,9 +235,11 @@ private:
 			{"SIZE",     0, F32x1, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
 
-		vertexShader = dx11.shaders.getVS(dx11.params.shadersDirectory + L"text.hlsl");
-		pixelShader  = dx11.shaders.getPS(dx11.params.shadersDirectory + L"text.hlsl");
-		dsPixelShader = dx11.shaders.getPS(dx11.params.shadersDirectory + L"text.hlsl", "PSMainDropShadow");
+        ShaderArgs args{};
+        vertexShader = dx11.shaders.makeVS(dx11.params.shadersDirectory + L"text.hlsl", args);
+		pixelShader  = dx11.shaders.makePS(dx11.params.shadersDirectory + L"text.hlsl", args);
+        args.entry("PSMainDropShadow");
+		dsPixelShader = dx11.shaders.makePS(dx11.params.shadersDirectory + L"text.hlsl", args);
 
 		throwOnDXError(dx11.device->CreateInputLayout(
 			layout, 4,

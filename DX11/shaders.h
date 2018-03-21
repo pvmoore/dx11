@@ -38,25 +38,53 @@ struct ComputeShader final {
 	inline operator ID3D11ComputeShader*() const { return handle.Get(); }
 };
 //======================================================================================
-
+struct ShaderArgs final {
+    friend class Shaders;
+private:
+    vector<D3D_SHADER_MACRO> _defines = {{nullptr, nullptr}};
+    //vector<ID3DInclude> _includes;
+    string _target;
+    string _entry;
+    uint _options = 0;
+    uint _optionsAdd = 0;
+    uint _optionsRemove = 0;
+    bool _verbose = false;
+public:
+    auto& define(const char* name, const char* value) {
+        _defines.back() = {name, value};
+        _defines.push_back({nullptr, nullptr});
+        return *this;
+    }
+    //auto& include(const ID3DInclude& incl) { throw std::runtime_error("Not implemented"); return *this; }
+    auto& entry(const string& entry) { _entry = entry; return *this; }
+    auto& target(const string& t) { _target = t; return *this; }
+    auto& options(uint absolute, uint add=0, uint remove=0) { 
+        _options = absolute; 
+        _optionsAdd = add;
+        _optionsRemove = remove;
+        return *this; 
+    }
+    auto& verbose() { _verbose = true; return *this; }
+};
+//======================================================================================
 class Shaders final {
 	class DX11& dx11;
 public:
-	enum Target {
-		_5_0
-	};
-	//vector<ID3DInclude> _includes;
-	Target target = Target::_5_0;
-
 	Shaders(DX11& dx11) : dx11(dx11) {}
-	VertexShader getVS(const wstring& filename, string entry = "") const;
-	HullShader getHS(const wstring& filename, string entry = "") const;
-	DomainShader getDS(const wstring& filename, string entry = "") const;
-	GeometryShader getGS(const wstring& filename, string entry = "") const;
-	PixelShader getPS(const wstring& filename, string entry = "") const;
-	ComputeShader getCS(const wstring& filename, string entry = "", D3D_SHADER_MACRO* defines=nullptr) const;
+	HullShader makeHS(const wstring& filename, const ShaderArgs& args) const;
+	DomainShader makeDS(const wstring& filename, const ShaderArgs& args) const;
+	GeometryShader makeGS(const wstring& filename, const ShaderArgs& args) const;
+	PixelShader makePS(const wstring& filename, const ShaderArgs& args) const;
+    VertexShader makeVS(const wstring& filename, const ShaderArgs& args) const;
+    ComputeShader makeCS(const wstring& filename, const ShaderArgs& args) const;
 private:
-	ComPtr<ID3DBlob> compile(const wstring& filename, string entry, string target, D3D_SHADER_MACRO* defines = nullptr) const;
+    uint getOptions(const ShaderArgs& args) const;
+	ComPtr<ID3DBlob> compile(const wstring& filename, 
+                             const string& entry, 
+                             const string& target, 
+                             const D3D_SHADER_MACRO* defines,
+                             uint options,
+                             bool verbose) const;
 };
 
 } /// dx11

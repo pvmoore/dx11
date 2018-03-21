@@ -151,8 +151,9 @@ private:
 			{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 	    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
 
-		vertexShader = dx11.shaders.getVS(L"../Resources/shaders/triangle.hlsl");
-		pixelShader  = dx11.shaders.getPS(L"../Resources/shaders/triangle.hlsl");
+        ShaderArgs args{};
+        vertexShader = dx11.shaders.makeVS(L"../Resources/shaders/triangle.hlsl", args);
+		pixelShader  = dx11.shaders.makePS(L"../Resources/shaders/triangle.hlsl", args);
 
 		throwOnDXError(dx11.device->CreateInputLayout(
 			layout, 3, 

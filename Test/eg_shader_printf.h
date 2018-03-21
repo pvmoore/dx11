@@ -18,7 +18,7 @@ public:
     void setup() final override {
         Log::format("Application setup");
 
-        computeShader = dx11.shaders.getCS(L"../Resources/shaders/printf.hlsl");
+        computeShader = dx11.shaders.makeCS(L"../Resources/shaders/printf.hlsl", {});
 
         shaderPrintf.init(dx11.device, 7, true)
                     .setFloatFormat("%.3f");

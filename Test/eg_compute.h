@@ -14,7 +14,7 @@ class ExampleCompute final : public BaseExample {
 	RWStructuredBuffer<BufType> out;
 	StagingReadBuffer<BufType> stagingRead;
 	ConstantBuffer<Constants> constantBuffer;
-	ComputeShader computeShader;
+    ComputeShader computeShader;
 	static constexpr int N = 1024;
 	static constexpr int workgroupSize = 64;
 	BufType scratch[N];
@@ -30,7 +30,9 @@ public:
 	void setup() final override {
 		Log::format("Application setup");
 
-		computeShader = dx11.shaders.getCS(L"../Resources/shaders/compute.hlsl");
+        ShaderArgs args{};
+        args.verbose();
+        computeShader = dx11.shaders.makeCS(L"../Resources/shaders/compute.hlsl", args);
 
 		BufType* indata1 = new BufType[N];
 		BufType* indata2 = new BufType[N];
@@ -64,7 +66,7 @@ public:
 
 		auto context = frame.context;
 
-		context->CSSetShader(computeShader, nullptr, 0);
+		context->CSSetShader(computeShader.handle.Get(), nullptr, 0);
 
 		ID3D11ShaderResourceView* views[] = {in1.view.Get(), in2.view.Get()};
 		context->CSSetShaderResources(0, 2, views);
