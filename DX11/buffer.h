@@ -14,7 +14,7 @@ protected:
 public:
 	ComPtr<ID3D11Buffer> handle;
 
-	void write(ComPtr<ID3D11DeviceContext> context, const void* data, uint offset = 0, uint length = 0) {
+	void write(ComPtr<ID3D11DeviceContext> context, const void* data, uint offset = 0, uint length = 0) const {
 		assert(data && "data is null");
 		assert(isInitialised);
 		if(length==0) length = _size;

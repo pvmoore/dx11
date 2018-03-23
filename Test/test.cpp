@@ -16,7 +16,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
 #endif
 
-#define TEST 3
+#define TEST 4
 
 #if TEST==1
 	Example2D app;
