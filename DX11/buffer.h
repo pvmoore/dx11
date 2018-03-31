@@ -13,7 +13,7 @@ protected:
 	bool isInitialised = false;
 public:
 	ComPtr<ID3D11Buffer> handle;
-
+protected:
 	void write(ComPtr<ID3D11DeviceContext> context, const void* data, uint offset = 0, uint length = 0) const {
 		assert(data && "data is null");
 		assert(isInitialised);
@@ -38,7 +38,6 @@ public:
 			}
 		} else assert(false);
 	}
-protected:
 	void init(ComPtr<ID3D11Device> device, uint size, const void* initialData) {
 		_size = size;
 		assert(_size>0);
@@ -76,6 +75,9 @@ public:
 		_usage = D3D11_USAGE::D3D11_USAGE_IMMUTABLE;
 		Buffer::init(device, numVertices*sizeof(T), initialData);
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const T* vertices, uint startVertex = 0, uint numVertices = 0) const {
+        Buffer::write(context, vertices, startVertex*sizeof(T), numVertices*sizeof(T));
+    }
 };
 //=========================================================================== IndexBuffer
 template<typename T>
@@ -93,6 +95,9 @@ public:
 		_usage = D3D11_USAGE::D3D11_USAGE_IMMUTABLE;
 		Buffer::init(device, numIndices * sizeof(T), initialData);
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const T* indices, uint startIndex = 0, uint numIndices = 0) const {
+        Buffer::write(context, indices, startIndex * sizeof(T), numIndices * sizeof(T));
+    }
 };
 //=========================================================================== StagingReadBuffer
 template<typename T>
@@ -115,6 +120,9 @@ public:
 		memcpy(dest, (ubyte*)mappedResource.pData, _size);
 		context->Unmap(handle.Get(), 0);
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const T* data, uint startElement = 0, uint numElements = 0) const {
+        Buffer::write(context, data, startElement * sizeof(T), numElements * sizeof(T));
+    }
 };
 //=========================================================================== ConstantBuffer
 template<class T>
@@ -161,6 +169,9 @@ public:
 
 		throwOnDXError(device->CreateShaderResourceView(handle.Get(), &desc, view.GetAddressOf()));
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const ELE* data, uint startElement = 0, uint numElements = 0) const {
+        Buffer::write(context, data, startElement * sizeof(ELE), numElements * sizeof(ELE));
+    }
 };
 //=========================================================================== RWStructuredBuffer
 template<class ELE>
@@ -186,6 +197,9 @@ public:
 
 		throwOnDXError(device->CreateUnorderedAccessView(handle.Get(), &desc, uav.GetAddressOf()));
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const ELE* data, uint startElement = 0, uint numElements = 0) const {
+        Buffer::write(context, data, startElement * sizeof(ELE), numElements * sizeof(ELE));
+    }
 };
 //=========================================================================== ByteAddressBuffer
 class ByteAddressBuffer final : public Buffer {
@@ -209,6 +223,9 @@ public:
 
 		throwOnDXError(device->CreateShaderResourceView(handle.Get(), &desc, view.GetAddressOf()));
 	}
+    void write(ComPtr<ID3D11DeviceContext> context, const uint* data, uint startUint = 0, uint numUints = 0) const {
+        Buffer::write(context, data, startUint * sizeof(uint), numUints * sizeof(uint));
+    }
 };
 //=========================================================================== RWByteAddressBuffer
 class RWByteAddressBuffer final : public Buffer {
@@ -231,6 +248,9 @@ public:
         desc.Buffer.NumElements = numUints;
         desc.Buffer.Flags = D3D11_BUFFEREX_SRV_FLAG::D3D11_BUFFEREX_SRV_FLAG_RAW;
         throwOnDXError(device->CreateUnorderedAccessView(handle.Get(), &desc, uav.GetAddressOf()));
+    }
+    void write(ComPtr<ID3D11DeviceContext> context, const uint* data, uint startUint = 0, uint numUints = 0) const {
+        Buffer::write(context, data, startUint * sizeof(uint), numUints * sizeof(uint));
     }
 };
 } /// dx11

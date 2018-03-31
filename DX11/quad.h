@@ -126,8 +126,7 @@ private:
 			vertices.push_back({it.pos+it.size, it.color, {1.0f, 1.0f}});	// 2
 			vertices.push_back({it.pos+float2(0, it.size.y), it.color, {0.0f, 1.0f}});	// 3
 		}
-		uint numBytes = (uint)vertices.size() * sizeof(Vertex);
-		vertexBuffer.write(frame.context, (void*)vertices.data(), 0, numBytes);
+		vertexBuffer.write(frame.context, vertices.data(), 0, (uint)vertices.size());
 		pipelineChanged = false;
 	}
 	void setupPipeline(DX11& dx11) {

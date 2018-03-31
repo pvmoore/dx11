@@ -203,8 +203,7 @@ private:
 				v++;
 			}
 		}
-		uint numBytes = (uint)vertices.size() * sizeof(Vertex);
-		vertexBuffer.write(frame.context, (void*)vertices.data(), 0, numBytes);
+		vertexBuffer.write(frame.context, vertices.data(), 0, (uint)vertices.size());
 	}
 	int countCharacters() {
 		ulong total = 0;

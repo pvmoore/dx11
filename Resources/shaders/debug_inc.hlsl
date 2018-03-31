@@ -183,3 +183,4 @@ void print(int4 v) {
 void print(uint4 v) {
     _doprint(v, 1);
 }
+
