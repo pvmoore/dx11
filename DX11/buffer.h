@@ -178,6 +178,7 @@ template<class ELE>
 class RWStructuredBuffer final : public Buffer {
 public:
 	ComPtr<ID3D11UnorderedAccessView> uav;
+    ComPtr<ID3D11ShaderResourceView> srv;
 
 	RWStructuredBuffer() {
 		_bindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE |
@@ -189,13 +190,21 @@ public:
 	void init(ComPtr<ID3D11Device> device, uint numElements) {
 		Buffer::init(device, numElements * sizeof(ELE), nullptr);
 
-		D3D11_UNORDERED_ACCESS_VIEW_DESC desc = {};
-		desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-		desc.Buffer.FirstElement = 0;
-		desc.Format = DXGI_FORMAT_UNKNOWN;      
-		desc.Buffer.NumElements = numElements;
+		D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+        uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+        uavDesc.Buffer.FirstElement = 0;
+        uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+        uavDesc.Buffer.NumElements = numElements;
 
-		throwOnDXError(device->CreateUnorderedAccessView(handle.Get(), &desc, uav.GetAddressOf()));
+		throwOnDXError(device->CreateUnorderedAccessView(handle.Get(), &uavDesc, uav.GetAddressOf()));
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
+        srvDesc.BufferEx.FirstElement = 0;
+        srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+        srvDesc.BufferEx.NumElements = numElements;
+
+        throwOnDXError(device->CreateShaderResourceView(handle.Get(), &srvDesc, srv.GetAddressOf()));
 	}
     void write(ComPtr<ID3D11DeviceContext> context, const ELE* data, uint startElement = 0, uint numElements = 0) const {
         Buffer::write(context, data, startElement * sizeof(ELE), numElements * sizeof(ELE));

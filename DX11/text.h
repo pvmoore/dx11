@@ -160,7 +160,7 @@ private:
 
 		auto v = 0;
 		for(auto& c : textChunks) {
-			auto maxY = c.size;
+			//auto maxY = c.size;
 			float X = (float)c.x;
 			float Y = (float)c.y;
 
