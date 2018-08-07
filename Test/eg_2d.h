@@ -29,12 +29,13 @@ class Example2D final : public BaseExample {
 	Camera2D camera2d;
 
 	Quad quad1;
+    Text text;
 	int mouseScroll = 0;
 public:
 	void init(HINSTANCE hInstance, int cmdShow) final override {
 		params.title = L"DX11 2D Example";
-		params.width = 1000;
-		params.height = 600;
+		params.width = 1200;
+		params.height = 800;
 		params.windowMode = WindowMode::WINDOWED;
 		params.vsync = false;
 		BaseExample::init(hInstance, cmdShow);
@@ -54,6 +55,11 @@ public:
 			.texture(texture0.srv)
 			.quad({450,250}, {100,100})
 			.quad({560,250}, {150,150});
+
+        text.init(dx11, dx11.fonts.get(L"segoe-ui-black"), true, 100)
+            .camera(camera2d)
+            .setSize(32)
+            .appendText("I am some text 1234567890", 320, 2);
 
 		Log::format("Application setup finished");
 	}
@@ -84,6 +90,7 @@ public:
 			quad1.camera(camera2d);
 		}
 		quad1.update(frame);
+        text.update(frame);
 	}
 	void render(const FrameResource& frame) final override {
 		auto context = frame.context;
@@ -113,6 +120,7 @@ public:
 		context->Draw(6, 0);
 
 		quad1.render(frame);
+        text.render(frame);
 	}
 private:
 	void setupPipeline() {
