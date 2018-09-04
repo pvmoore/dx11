@@ -32,7 +32,7 @@ public:
             .entry("CSMain");
         computeShader = dx11.shaders.makeCS(L"../Resources/shaders/compute_to_texture.hlsl", args);
 
-		targetTexture.init(dx11.device, TEXSIZE, DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
+		targetTexture.init(dx11.device, TEXSIZE, DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM, 4);
 
 		sampler.init(dx11.device);
 

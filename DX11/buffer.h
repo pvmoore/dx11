@@ -52,9 +52,9 @@ protected:
 
 		if(initialData) {
 			D3D11_SUBRESOURCE_DATA data = {initialData};
-			device->CreateBuffer(&bufferDesc, &data, handle.GetAddressOf());
+            throwOnDXError(device->CreateBuffer(&bufferDesc, &data, handle.GetAddressOf()), "CreateBuffer");
 		} else {
-			device->CreateBuffer(&bufferDesc, nullptr, handle.GetAddressOf());
+            throwOnDXError(device->CreateBuffer(&bufferDesc, nullptr, handle.GetAddressOf()), "CreateBuffer");
 		}
 		isInitialised = true;
 	}
@@ -220,15 +220,16 @@ public:
 		_usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 		_misc = D3D11_RESOURCE_MISC_FLAG::D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
 	}
-	void init(ComPtr<ID3D11Device> device, uint numUnits) {
-		Buffer::init(device, numUnits*4, nullptr);
+    /// Assumes data is uints
+	void init(ComPtr<ID3D11Device> device, uint numUints) {
+		Buffer::init(device, numUints*4, nullptr);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC desc = {};
 		desc.ViewDimension = D3D_SRV_DIMENSION::D3D11_SRV_DIMENSION_BUFFEREX;
 		desc.Format = DXGI_FORMAT::DXGI_FORMAT_R32_TYPELESS;
 		desc.BufferEx.FirstElement = 0;
 		desc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG::D3D11_BUFFEREX_SRV_FLAG_RAW;
-		desc.BufferEx.NumElements = numUnits;
+		desc.BufferEx.NumElements = numUints;
 
 		throwOnDXError(device->CreateShaderResourceView(handle.Get(), &desc, view.GetAddressOf()));
 	}
@@ -247,6 +248,7 @@ public:
         _usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
         _misc = D3D11_RESOURCE_MISC_FLAG::D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
     }
+    /// Assumes data is uints 
     void init(ComPtr<ID3D11Device> device, uint numUints) {
         Buffer::init(device, numUints * 4, nullptr);
 

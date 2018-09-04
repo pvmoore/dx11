@@ -11,7 +11,7 @@ public:
 	ComPtr<ID3D11Texture2D> texture;
 	ComPtr<ID3D11ShaderResourceView> srv;
 
-	void init(ComPtr<ID3D11Device> device, uint2 size, DXGI_FORMAT format, const void* initData=nullptr) {
+	void init(ComPtr<ID3D11Device> device, uint2 size, DXGI_FORMAT format, uint bytesPerPixel, const void* initData) {
 		D3D11_TEXTURE2D_DESC desc = {};
 		desc.Width = size.x;
 		desc.Height = size.y;
@@ -28,10 +28,10 @@ public:
 		D3D11_SUBRESOURCE_DATA* initDataPtr = nullptr;
 		D3D11_SUBRESOURCE_DATA srd = {};
 		if(initData) {
-			srd.pSysMem = initData;
-			srd.SysMemPitch = size.x;
-			srd.SysMemSlicePitch = size.x * size.y;
-			initDataPtr = &srd;
+			srd.pSysMem          = initData;
+			srd.SysMemPitch      = size.x * bytesPerPixel;
+			srd.SysMemSlicePitch = size.x * size.y * bytesPerPixel;
+			initDataPtr          = &srd;
 		}
 		throwOnDXError(device->CreateTexture2D(&desc, initDataPtr, texture.GetAddressOf()));
 
@@ -50,7 +50,7 @@ public:
 	ComPtr<ID3D11UnorderedAccessView> uav;
 	ComPtr<ID3D11ShaderResourceView> srv;
 
-	void init(ComPtr<ID3D11Device> device, uint2 size, DXGI_FORMAT format, const void* initData = nullptr) {
+	void init(ComPtr<ID3D11Device> device, uint2 size, DXGI_FORMAT format, uint bytesPerPixel, const void* initData = nullptr) {
 		D3D11_TEXTURE2D_DESC desc = {};
 		desc.Width = size.x;
 		desc.Height = size.y;
@@ -59,7 +59,7 @@ public:
 		desc.Format = format;
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = 0;
-		desc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+		desc.Usage     = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 		desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_UNORDERED_ACCESS |
 						 D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
 		desc.CPUAccessFlags = 0;
@@ -69,8 +69,8 @@ public:
 		D3D11_SUBRESOURCE_DATA srd = {};
 		if(initData) {
 			srd.pSysMem = initData;
-			srd.SysMemPitch = size.x;
-			srd.SysMemSlicePitch = size.x * size.y;
+			srd.SysMemPitch = size.x * bytesPerPixel;
+			srd.SysMemSlicePitch = size.x * size.y * bytesPerPixel;
 			initDataPtr = &srd;
 		}
 		throwOnDXError(device->CreateTexture2D(&desc, initDataPtr, texture.GetAddressOf()));

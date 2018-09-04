@@ -41,7 +41,6 @@ static uint getDefaultOptions() {
 #else
     compileOpts |= 
         D3DCOMPILE_OPTIMIZATION_LEVEL3 |
-        //D3DCOMPILE_SKIP_VALIDATION;
         0;
 #endif
 	return compileOpts;

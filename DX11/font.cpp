@@ -129,7 +129,7 @@ void Fonts::readFontTexture(Font& font) {
 		src += 4;
 	}
 
-	font.texture.init(dx11.device, {BM_WIDTH, BM_WIDTH}, DXGI_FORMAT::DXGI_FORMAT_R8_UNORM, data);
+	font.texture.init(dx11.device, {BM_WIDTH, BM_WIDTH}, DXGI_FORMAT::DXGI_FORMAT_R8_UNORM, 1, data);
 	
 	free(data);
 }
