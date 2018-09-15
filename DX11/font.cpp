@@ -62,10 +62,10 @@ Rect Font::getRect(const string& text, float size) {
 	return r;
 }
 
-shared_ptr<Font> Fonts::get(const wstring& name) {
+Font* Fonts::get(const wstring& name) {
 	auto iter = fonts.find(name);
 	if(iter != fonts.end()) {
-		return iter->second;
+		return iter->second.get();
 	}
 	Font font = {};
 	font.name = name;
@@ -73,8 +73,8 @@ shared_ptr<Font> Fonts::get(const wstring& name) {
 	readFontTexture(font);
 	Log::format("Loaded font %s%s", WString::toString(directory).c_str(), WString::toString(name).c_str());
 
-	fonts[name] = std::make_shared<Font>(font);
-	return fonts[name];
+	fonts[name] = std::make_unique<Font>(font);
+	return fonts[name].get();
 }
 void Fonts::readFontPage(Font& font) {
 	const auto getFirstToken = [](string& line, ulong offset=0)->string { 

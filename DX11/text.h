@@ -41,7 +41,7 @@ class Text {
 	float size;
 	rgba colour = rgba{1, 1, 1, 1};
 	vector<TextChunk> textChunks;
-	shared_ptr<Font> font;
+	Font* font;
 	int maxCharacters;
 	bool dropShadow;
 	bool pipelineChanged = true;
@@ -49,7 +49,7 @@ class Text {
 	bool isInitialised = false, cameraSet = false;
 	int numCharacters = 0;
 public:
-	Text& init(DX11& dx11, shared_ptr<Font> font, bool dropShadow, int maxCharacters) {
+	Text& init(DX11& dx11, Font* font, bool dropShadow, int maxCharacters) {
 		this->font = font;
 		this->dropShadow = dropShadow;
 		this->maxCharacters = maxCharacters;

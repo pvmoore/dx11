@@ -47,11 +47,11 @@ public:
 ///================================================================================= Fonts
 class Fonts final {
 	wstring directory = L"./";
-	unordered_map<wstring, shared_ptr<Font>> fonts;
+	unordered_map<wstring, unique_ptr<Font>> fonts;
 	DX11& dx11;
 public:
 	Fonts(DX11& dx11) : dx11(dx11) {}
-	shared_ptr<Font> get(const wstring& name);
+	Font* get(const wstring& name);
 	void setDirectory(const wstring& dir) { this->directory = dir; }
 private:
 	void readFontPage(Font& font);

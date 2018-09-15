@@ -50,6 +50,7 @@
 #include <unordered_map>
 #include <exception>
 #include <memory>
+#include <random>
 
 using std::shared_ptr;
 using std::unique_ptr;
