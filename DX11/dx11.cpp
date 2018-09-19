@@ -96,7 +96,7 @@ void DX11::run() {
 void DX11::createWindow() {
 	Log::write("Creating window");
 	WNDCLASSEXW wcex;
-	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.cbSize = sizeof(WNDCLASSEXW);
 
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = windowProc;
